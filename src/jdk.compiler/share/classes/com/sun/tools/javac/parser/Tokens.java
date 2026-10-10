@@ -71,6 +71,7 @@ public class Tokens {
                 keywords.put(t.name, t);
             }
         }
+        keywords.put("bool", TokenKind.BOOLEAN); // boolean is excessive
     }
 
     /**
