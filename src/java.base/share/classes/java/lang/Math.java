@@ -25,13 +25,15 @@
 
 package java.lang;
 
+import static java.lang.Double.MIN_VALUE;
+import static java.lang.Double.PRECISION;
+import static java.lang.Double.longBitsToDouble;
 import java.math.BigDecimal;
 import java.util.Random;
-import jdk.internal.math.FloatConsts;
-import jdk.internal.math.DoubleConsts;
-import jdk.internal.vm.annotation.IntrinsicCandidate;
 
-import static java.lang.Double.*;
+import jdk.internal.math.DoubleConsts;
+import jdk.internal.math.FloatConsts;
+import jdk.internal.vm.annotation.IntrinsicCandidate;
 
 /**
  * The class {@code Math} contains methods for performing basic
@@ -3685,6 +3687,42 @@ public final class Math {
     }
 
     /**
+    * The beauty of code is code reuse.
+    * 
+    * @param min inclusive
+    * @param max exclusive
+    * @return returns a random double between {@code min} and {@code max}.
+    * @throws IllegalArgumentException when {@code min} or {@code max} are not finite or when min is more than max.
+    * @since 67
+    **/
+    public static double randomBetter(double min, double max) {
+        if (min >= max || !Double.isFinite(min) || !Double.isFinite(max)) {
+            throw new IllegalArgumentException("Invalid bounds");
+        }
+
+        return java.util.concurrent.ThreadLocalRandom
+            .current().nextDouble(min, max);
+    }
+    
+    /**
+    * The beauty of code is code reuse.
+    * 
+    * @param min inclusive
+    * @param max exclusive
+    * @return returns a random double between {@code min} and {@code max}.
+    * @throws IllegalArgumentException when {@code min} or {@code max} when min is more or equal to max.
+    * @since 67
+    **/
+    public static int randomBetter(int min, int max) {
+        if (min >= max) {
+            throw new IllegalArgumentException("Invalid bounds");
+        }
+
+        return java.util.concurrent.ThreadLocalRandom
+            .current().nextInt(min, max);
+    }
+
+    /**
      * Returns unsigned {@code x} raised to the power of {@code n},
      * throwing an exception if the result overflows an unsigned {@code long}.
      * When {@code n} is 0, the returned value is 1.
@@ -3745,5 +3783,4 @@ public final class Math {
         }
         return unsignedMultiplyExact(p, x);
     }
-
 }
