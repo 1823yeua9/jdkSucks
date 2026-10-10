@@ -2463,6 +2463,11 @@ public class Resolve {
             else bestSoFar = bestOf(bestSoFar, sym);
         }
 
+        // allow for String to be lowercase.
+        if (name.contentEquals("string") && !bestSoFar.exists()) {
+            return syms.stringType.tsym;
+        }
+
         return bestSoFar;
     }
 
